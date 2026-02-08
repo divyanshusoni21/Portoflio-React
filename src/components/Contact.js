@@ -13,7 +13,7 @@ const Contact = () => {
     const [content,setContent] = useState('click to copy');
 
     const CTC =()=>{
-        navigator.clipboard.writeText('amans197555@gmail.com');
+        navigator.clipboard.writeText('divyanshusoni061@gmail.com');
         setContent('copied !')
     }
 
@@ -28,7 +28,7 @@ const Contact = () => {
                 <div className='flex'>
                     <div className=''>
                         <IconCard img={linkedin} link={'https://www.linkedin.com/in/divyanshusoni/'} title={'Linkedin'}/>
-                        <IconCard img={github} link={'https://github.com/coderaman21'} title={'Github'}/>
+                        <IconCard img={github} link={'https://github.com/divyanshusoni21'} title={'Github'}/>
                         <div className='flex'>
                             <img className='pb-6 pr-2 height' src={gmail} alt="" />
                             <span className='text-gray-300 pt-4 txt-hvr'  data-tooltip-target="tooltip-top" data-tooltip-placement="top" onClick={CTC} onMouseEnter={()=>{setContent('click to copy')}} >Gmail</span>
@@ -38,7 +38,7 @@ const Contact = () => {
                             </div>
                         </div>
                         <IconCard img={instagram} link={'https://www.instagram.com/aman_soni21/'} title={'Instagram'}/>
-                        <IconCard img={twitter} link={'https://twitter.com/amans197555'} title={'Twitter'}/>
+                        <IconCard img={twitter} link={'https://x.com/Divyanshus061'} title={'Twitter'}/>
                     </div>
                     <div className='m-auto mb-auto mt-20'>
                         <img src={contact} className='h-36 floating'  alt="" />
