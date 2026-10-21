@@ -1,7 +1,5 @@
 import React from "react";
 import { FaGithub } from "react-icons/fa";
-
-import { FaGlobe, FaGlobeAmericas } from 'react-icons/fa'; 
 import { BsGlobe2 } from 'react-icons/bs';
 import ProjectMediaGallery from "./ProjectMediaGallery";
 
