@@ -1,12 +1,24 @@
-import React from 'react'
+import React from "react";
 
-const SkillsCard = (props) => {
-  return <>
-        <div className='shandow-md shadow-[#040c16] hover:scale-110 duration-500'>
-            <img src={props.image} alt={props.alt} className='w-20 mx-auto'/>
-            <p className='my-4'>{props.name}</p>
-        </div>
-    </>
-}
+const SkillsCard = ({ name, alt, image, images }) => {
+  const icons = images ?? (image ? [{ src: image, alt: alt || `${name} icon` }] : []);
+  const pair = icons.length > 1;
 
-export default SkillsCard
+  return (
+    <div className="skills-card">
+      <div className={`skills-card-icons${pair ? " skills-card-icons--pair" : ""}`}>
+        {icons.map((icon) => (
+          <img
+            key={icon.src}
+            src={icon.src}
+            alt={icon.alt || ""}
+            className="skills-card-icon"
+          />
+        ))}
+      </div>
+      <p className="skills-card-name">{name}</p>
+    </div>
+  );
+};
+
+export default SkillsCard;

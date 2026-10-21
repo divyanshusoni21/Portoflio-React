@@ -1,29 +1,354 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;900&display=swap');
+
+:root {
+  --color-bg: #ffffff;
+  --color-surface: #f8fafc;
+  --color-green: #0d9488;
+  --color-green-dark: #0f766e;
+  --color-green-soft: #ccfbf1;
+  --color-ink: #0f172a;
+  --color-muted: #475569;
+  --color-faint: #94a3b8;
+  --color-border: #e2e8f0;
+  --color-link: #2563eb;
+  --color-link-hover: #1d4ed8;
+  --nav-height: 80px;
+  --panel-pad: 1.5rem;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --nav-height: calc(56px + env(safe-area-inset-top, 0px));
+  }
+}
 
 @layer base {
-    body{
-        @apply font-[Raleway];
-    }
-    li{
-        @apply px-4;
-        @apply cursor-pointer
-    }
-}
-.content-div{
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    height: 250px;
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans bg-portfolio-bg text-portfolio-ink antialiased;
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-portfolio-green ring-offset-2;
+  }
 }
 
-.content-div:hover{
-    background-image: linear-gradient(
-        to right,
-        rgba(112,157,255,0.8),
-        hsla(242,74%,61%,0.8)
-    )!important;
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--color-green);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0 0 0.5rem 0;
 }
+
+.skip-link:focus {
+  left: 0;
+}
+
+/* Main scroll shell — mobile first (vertical) */
+.main-scroll {
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  background: var(--color-bg);
+}
+
+.main-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.main-scroll > section,
+.main-scroll > [data-section] {
+  min-height: 100dvh;
+  width: 100%;
+  /* Sections already pad for the fixed header; extra scroll-margin double-offsets. */
+  scroll-margin-top: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 767px) {
+  .main-scroll > section,
+  .main-scroll > [data-section] {
+    min-height: 0;
+  }
+
+  #intro {
+    min-height: 100dvh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  .main-scroll {
+    scroll-behavior: auto;
+  }
+}
+
+/* Project full-slide styles live in css/project.css */
+
+/* Section title (resume-style) */
+.section-title {
+  @apply text-sm sm:text-base font-bold tracking-[0.2em] uppercase text-portfolio-green;
+}
+
+.section-title:focus {
+  outline: none;
+}
+
+/* Body hyperlinks — resume-style blue */
+.link-body {
+  color: var(--color-link);
+  text-decoration: none;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+
+.link-body:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+}
+
+/* Nav link + sliding highlighter */
+.nav-desktop {
+  position: relative;
+}
+
+.nav-desktop-list {
+  position: relative;
+  z-index: 1;
+}
+
+.nav-desktop-item {
+  padding-left: 1.05rem;
+  padding-right: 1.05rem;
+}
+
+.nav-link {
+  @apply text-portfolio-muted transition-colors duration-150;
+  position: relative;
+  z-index: 1;
+  padding-inline: 0.15rem;
+}
+
+.nav-link:hover {
+  @apply text-portfolio-green;
+}
+
+.nav-link-active {
+  @apply text-portfolio-green font-semibold;
+}
+
+.nav-highlighter {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, width, height;
+  border-radius: 9999px;
+  border: 1px solid rgba(13, 148, 136, 0.22);
+  background: rgba(204, 251, 241, 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 0 16px rgba(13, 148, 136, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    width 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 180ms ease;
+}
+
+.nav-highlighter.is-ready {
+  opacity: 1;
+}
+
+/* Mobile active — matching glass pill background */
+.nav-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  min-width: 0;
+  flex: 1;
+  width: 100%;
+}
+
+.nav-link-mobile {
+  @apply text-portfolio-ink transition-colors duration-150;
+  position: relative;
+  padding: 0.45rem 0.45rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  min-height: 44px;
+}
+
+@media (min-width: 380px) {
+  .nav-link-mobile {
+    font-size: 0.8125rem;
+    padding: 0.45rem 0.65rem;
+  }
+}
+
+.nav-link-mobile:hover {
+  @apply text-portfolio-green;
+}
+
+.nav-link-mobile-active {
+  @apply text-portfolio-green font-semibold;
+  background: rgba(204, 251, 241, 0.72);
+  border: 1px solid rgba(13, 148, 136, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    0 0 16px rgba(13, 148, 136, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-highlighter {
+    transition: opacity 120ms ease;
+  }
+}
+
+/* Section tick rail (desktop) */
+.section-ticks {
+  position: fixed;
+  right: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .section-ticks {
+    display: flex;
+  }
+}
+
+.section-ticks-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-faint);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: center;
+  transition: color 0.15s ease, opacity 0.25s ease;
+}
+
+.section-ticks:hover .section-ticks-chevron,
+.section-ticks:focus-within .section-ticks-chevron {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.section-ticks:hover .section-ticks-chevron:disabled,
+.section-ticks:focus-within .section-ticks-chevron:disabled {
+  opacity: 0.28;
+  pointer-events: auto;
+}
+
+.section-ticks-chevron:hover:not(:disabled) {
+  color: var(--color-green);
+}
+
+.section-ticks-chevron:disabled {
+  opacity: 0;
+  cursor: default;
+}
+
+.section-tick {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 14px;
+  min-width: 1.5rem;
+  padding: 0.25rem 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transform-origin: center;
+}
+
+.section-tick-mark {
+  display: block;
+  width: 10px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.75);
+  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+}
+
+.section-tick:hover .section-tick-mark,
+.section-tick:focus-visible .section-tick-mark {
+  width: 14px;
+  background: var(--color-green);
+}
+
+.section-tick.is-active .section-tick-mark {
+  width: 18px;
+  height: 2.5px;
+  background: var(--color-green);
+}
+
+.section-tick-label {
+  position: absolute;
+  right: calc(100% + 0.4rem);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(4px);
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.section-tick:hover .section-tick-label,
+.section-tick:focus-visible .section-tick-label {
+  opacity: 1;
+  transform: none;
+}
+
+

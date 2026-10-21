@@ -1,116 +1,34 @@
-.contact-body {
-    display: flex;
-    justify-content: center;
-}
-.contact-img{
-    height: 25vh;
-    margin: auto;
-}
-
-
-.bounce{
-    transition: all .4s ease-in-out;
-    -webkit-transition: all .4s ease-in-out;
-}
-.bounce:hover{
-    -webkit-transform: translateY(-25px);
-    transform: translateY(-25px);
-}
-.contact-container {
-    height: 80vh;
-}
-.contact-pad{
-    padding-top: 100px;
-}
-.mb{
-    margin-bottom: 65px;
-}
-.mt{
-    margin-top: 60px;
+.contact-tooltip {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  z-index: 1;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  background: var(--color-green);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  pointer-events: none;
+  white-space: nowrap;
+  animation: contact-tooltip-in 0.18s ease-out;
 }
 
-
-.email {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 17%;    
+@keyframes contact-tooltip-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.contact-body img {
-    text-align: center;
-    width: 3.5rem;
-    border-radius: 50%;
-}
-.social-media{
-    margin: 0px 60px;
-}
-.social-media a{
-    color: white;
-    font-size: 16px;
-    /* font-family: 'Zen Loop', cursive; */
-    text-decoration: none;
-    text-shadow: #000000 3px 7px 4px;
-    transition: all .3s ease-in-out;
-
-}
-.social-media a:hover{
-    color: rgba(255, 187, 27, 0.856);
-}
-.txt-hvr{
-    color: white;
-    font-size: 16px;
-    /* font-family: 'Zen Loop', cursive; */
-    cursor: pointer;
-    text-shadow: #000000 3px 7px 4px;
-    transition: all .3s ease-in-out;
-}
-.txt-hvr:hover{
-    color: rgba(255, 187, 27, 0.856);
-}
-.floating { 
-    animation-name: floating;
-    animation-duration: 4s;
-    animation-iteration-count: infinite;
-    animation-timing-function: ease-in-out;
-
-}
-.height{
-    height: 12vh;
-}
-@keyframes floating {
-    0% { transform: translate(0,  0%); }
-    50%  { transform: translate(0, 60%); }
-    100%   { transform: translate(0, 0%); }   
-}
-
-
-@media only screen and (max-width:1150px) {
-    /* contact me section  */
-    .contact-container{
-        height: 80vh;
-    }
-    #contact-body{
-        flex-direction: column;
-        align-items: center;
-    }
-    .contact-pad{
-        padding-top: 35px;
-    }
-    .mb{
-        margin-bottom: 40px;
-    }
-    .mt{
-        margin-top: 30px;
-    }
-    .copy{font-size: .9rem;}
-    .contact-body img {width: 3rem;}
-    .social-media{margin: 0 10px;}
-    .social-media a{font-size: .9rem;}
-    .email{
-        width: 60%; 
-        margin: 15px;
-        font-size: 17px;
-    }
+@media (prefers-reduced-motion: reduce) {
+  .contact-tooltip {
+    animation: none;
+  }
 }
