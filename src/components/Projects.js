@@ -1,48 +1,173 @@
-import React from 'react'
-import blogs from '../assets/blogs.png'
-import edues from '../assets/edues.png'
-import ytvidclipper from '../assets/yt-vidclipper.png'
-import texutilitie from '../assets/texutilitie.png'
-import jamnotes from '../assets/jam_notes.png'
-import shoppingo from '../assets/shoppingo.png'
-import ProjectCard from './ProjectCard'
-import '../css/project.css'
+import React, { useCallback, useEffect, useState } from "react";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
+import ProjectSlide, { ProjectMeta } from "./ProjectSlide";
+import ProjectMediaGallery from "./ProjectMediaGallery";
+import { projects } from "../data/projects";
+import { useMediaQuery } from "../hooks/useMediaQuery";
+import "../css/project.css";
 
-const Projects = () => {
-    let shoppingoSummary = "A BackEnd only E-commerce web app made with python's django restframework. Explore the APIs by getting categories and their products, api to search products , create orders, get all products of user and many more."
-    let blogsSummary = 'Django blog application with CRUD opertions using class based viwes. sign in or signup ,view profile , create post ,view post and many more.. '
-    let utilSummary = 'Perform diffrent action on your text such as character count, newline remover, extra-space remover etc. written in python-django.'
-    let eduesSummary = 'A static responsive web-site using html,css and javascript. '
-    let jamNotesSummary = 'A FullStack website to create notes , with React as Frontend and Django as Backend . login to your account or signup for one. Create,Read,Update,Delete notes. '
-    let ytvidclipperSummary = 'Create short clips of youtube video, just give the youtube url and timestamp of the clip. A full stack web app built using django and react.'
-
-    return (
-    <div name='projects' className='w-full  bg-[#00040f] text-gray-300'>
-        <div className='max-w-[1000px] w-full h-full mx-auto flex flex-col justify-center p-4'>
-            <div className=''>
-                <p className='text-4xl font-bold inline border-b-4 text-gray-300 border-pink-600'>
-                Projects
-                </p>
-                <p className='py-3'>
-                    check out my recent work
-                </p>
-            </div>
-            {/* container */}
-            <div className='grid sm:grid-cols-2 md:grid-cols-3 gap-4'>
-
-                {/* project cards */}
-
-                <ProjectCard name='Yt VidClipper' code='https://github.com/divyanshusoni21/Yt-Vidclipper' demo='https://yt-vidclipper-fe.vercel.app/' image={ytvidclipper}  summary={ytvidclipperSummary}/>
-                <ProjectCard name='Shoppingo' code='https://github.com/coderaman21/Shoppingo_BE' demo='https://documenter.getpostman.com/view/18000926/2s9YJW5RP9' image={shoppingo} summary={shoppingoSummary}/>
-                <ProjectCard name='Jam Notes' code='https://github.com/coderaman21/jam-notes-BE' demo='https://jam-notes.netlify.app/' image={jamnotes} summary={jamNotesSummary}/>
-                <ProjectCard name='Techies blogs' code='https://github.com/coderaman21/techies-blogs' demo='https://techies-blogs.vercel.app/' image={blogs}  summary={blogsSummary}/>
-                <ProjectCard name='Textutilite.com' code='https://github.com/coderaman21/Textutils' demo='https://textutils-five-wine.vercel.app/' image={texutilitie}  summary={utilSummary}/>
-                <ProjectCard name='Edues.in' code='https://github.com/coderaman21/Edues.in' demo='https://coderaman21.github.io/Edues.in/' image={edues}  summary={eduesSummary}/>
-                            
-            </div>
-        </div>
-    </div>
-  )
+function pad2(n) {
+  return String(n).padStart(2, "0");
 }
 
-export default Projects
+function ProjectArrowNav({ activeIndex, total, onGo }) {
+  return (
+    <div
+      className="projects-arrow-nav"
+      role="group"
+      aria-label={`Project ${activeIndex + 1} of ${total}`}
+    >
+      <button
+        type="button"
+        className="project-nav-btn"
+        aria-label="Previous project"
+        disabled={activeIndex === 0}
+        onClick={() => onGo(-1)}
+      >
+        <HiChevronLeft size={20} aria-hidden="true" />
+      </button>
+      <span className="projects-arrow-count" aria-live="polite">
+        {pad2(activeIndex + 1)} / {pad2(total)}
+      </span>
+      <button
+        type="button"
+        className="project-nav-btn"
+        aria-label="Next project"
+        disabled={activeIndex === total - 1}
+        onClick={() => onGo(1)}
+      >
+        <HiChevronRight size={20} aria-hidden="true" />
+      </button>
+    </div>
+  );
+}
+
+function ProjectsStack() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const total = projects.length;
+  const project = projects[activeIndex];
+
+  const go = useCallback(
+    (dir) => {
+      const next = Math.max(0, Math.min(activeIndex + dir, total - 1));
+      if (next === activeIndex) return;
+      setDirection(dir);
+      setActiveIndex(next);
+    },
+    [activeIndex, total]
+  );
+
+  return (
+    <section
+      id="projects"
+      data-section="projects"
+      className="projects-panel projects-panel--stack"
+      aria-labelledby="projects-heading"
+    >
+      <div className="projects-chrome">
+        <h2 id="projects-heading" tabIndex={-1} className="section-title">
+          Projects
+        </h2>
+        <ProjectArrowNav activeIndex={activeIndex} total={total} onGo={go} />
+      </div>
+
+      <article
+        key={project.name}
+        className="project-card"
+        aria-label={`${project.name}, project ${activeIndex + 1} of ${total}`}
+      >
+        <ProjectMediaGallery
+          media={project.media}
+          projectName={project.name}
+          direction={direction}
+        />
+        <ProjectMeta {...project} direction={direction} />
+      </article>
+    </section>
+  );
+}
+
+function ProjectsCarousel() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const total = projects.length;
+  const project = projects[activeIndex];
+
+  const go = useCallback(
+    (dir) => {
+      const next = Math.max(0, Math.min(activeIndex + dir, total - 1));
+      if (next === activeIndex) return;
+      setDirection(dir);
+      setActiveIndex(next);
+    },
+    [activeIndex, total]
+  );
+
+  useEffect(() => {
+    const section = document.getElementById("projects");
+    if (!section) return;
+
+    const onKey = (e) => {
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      if (!section.contains(document.activeElement) && document.activeElement !== section) {
+        return;
+      }
+      const tag = document.activeElement?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+
+      e.preventDefault();
+      if (e.key === "ArrowLeft") go(-1);
+      else go(1);
+    };
+
+    section.addEventListener("keydown", onKey);
+    return () => section.removeEventListener("keydown", onKey);
+  }, [go]);
+
+  return (
+    <section
+      id="projects"
+      data-section="projects"
+      className="projects-panel"
+      aria-labelledby="projects-heading"
+    >
+      <div className="projects-chrome">
+        <h2 id="projects-heading" tabIndex={-1} className="section-title">
+          Projects
+        </h2>
+      </div>
+
+      <div
+        className="projects-media-slot"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Projects"
+      >
+        <ProjectSlide
+          key={project.name}
+          name={project.name}
+          media={project.media}
+          index={activeIndex}
+          total={total}
+          direction={direction}
+        />
+      </div>
+
+      <ProjectMeta
+        {...project}
+        direction={direction}
+        pager={
+          <ProjectArrowNav activeIndex={activeIndex} total={total} onGo={go} />
+        }
+      />
+    </section>
+  );
+}
+
+const Projects = () => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  return isDesktop ? <ProjectsCarousel /> : <ProjectsStack />;
+};
+
+export default Projects;
