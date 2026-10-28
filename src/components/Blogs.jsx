@@ -18,6 +18,7 @@ import { FaGithub } from "react-icons/fa";
 
 export function getApiBaseUrl() {
   const raw = process.env.REACT_APP_API_BASE_URL ;
+
   return raw.replace(/\/+$/, "");
 }
 
