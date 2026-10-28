@@ -16,10 +16,9 @@ import {
 } from "react-icons/hi";
 import { FaGithub } from "react-icons/fa";
 
-const DEFAULT_API_BASE_URL = "http://127.0.0.1:8000";
-
 export function getApiBaseUrl() {
-  const raw = process.env.REACT_APP_API_BASE_URL || DEFAULT_API_BASE_URL;
+  const raw = process.env.REACT_APP_API_BASE_URL ;
+
   return raw.replace(/\/+$/, "");
 }
 
