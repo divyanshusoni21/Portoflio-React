@@ -1,3 +1,4 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useSectionScroll } from "./hooks/useSectionScroll";
 import Intro from "./components/Intro";
 import Navbar from "./components/Navbar";
@@ -7,8 +8,9 @@ import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import SectionDots from "./components/SectionDots";
 import DesignStudio from "./components/DesignStudio";
+import { BlogsListPage, BlogDetailPage } from "./components/Blogs";
 
-function App() {
+function PortfolioHome() {
   const { activeId, scrollToSection } = useSectionScroll();
 
   return (
@@ -26,6 +28,18 @@ function App() {
         <Contact />
       </main>
     </DesignStudio>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<PortfolioHome />} />
+        <Route path="/blogs" element={<BlogsListPage />} />
+        <Route path="/blogs/:slug" element={<BlogDetailPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
