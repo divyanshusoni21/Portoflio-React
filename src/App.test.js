@@ -153,3 +153,106 @@ test("renders section navigation ticks", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("Blogs routes and API integration", () => {
+  const originalFetch = global.fetch;
+
+  afterEach(() => {
+    global.fetch = originalFetch;
+    window.history.pushState({}, "", "/");
+  });
+
+  test("fetches and renders blog list at /blogs", async () => {
+    global.fetch = jest.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        count: 1,
+        next: null,
+        previous: null,
+        results: [
+          {
+            id: "69b60874-7c5d-4a1f-9c42-b06e9c9e1ba5",
+            title: "Simple Shortcuts & Setup Tweaks That Save Me Hours of Coding Every Week 🚀",
+            slug: "simple-shortcuts-that-save-me-hours-of-coding-every-week",
+            summary: "A quick summary of coding shortcuts.",
+            banner_image:
+              "http://127.0.0.1:8000/media/portfolio/blogs/banners/69b60874-7c5d-4a1f-9c42-b06e9c9e1ba5/Screenshot.png",
+            video_url: null,
+            author: "Divyanshu Soni",
+            tags: "productivity, vscode",
+            reading_time_minutes: 3,
+            is_published: true,
+            published_at: null,
+            created_at: "2026-10-27T17:50:38.590647Z",
+            updated_at: "2026-10-27T18:57:37.357710Z",
+          },
+        ],
+      }),
+    });
+
+    window.history.pushState({}, "", "/blogs");
+    render(<App />);
+
+    expect(
+      await screen.findByRole("heading", {
+        name: /simple shortcuts & setup tweaks/i,
+      })
+    ).toBeInTheDocument();
+    expect(global.fetch).toHaveBeenCalledWith(
+      "http://127.0.0.1:8000/api/portfolio/blogs"
+    );
+    expect(screen.getByText(/3 min read/i)).toBeInTheDocument();
+    expect(screen.getByText(/1 ARTICLE/i)).toBeInTheDocument();
+  });
+
+  test("fetches and renders blog details with markdown and video embeds at /blogs/:slug", async () => {
+    global.fetch = jest.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        id: "69b60874-7c5d-4a1f-9c42-b06e9c9e1ba5",
+        title: "Simple Shortcuts & Setup Tweaks That Save Me Hours of Coding Every Week 🚀",
+        slug: "simple-shortcuts-that-save-me-hours-of-coding-every-week",
+        summary: "",
+        content:
+          "Intro paragraph.\r\n\r\n## **Terminal, Keyboard & Mouse Tweaks**\r\n\r\n### **1\\. Shorten long terminal commands with Aliases**\r\n\r\n* **How to use it:** Add `alias gs=\"git status\"`\r\n\r\n![duplicate_code](http://127.0.0.1:8000/media/portfolio/blogs/media/Video_showing_copy_line_down.mp4)",
+        banner_image:
+          "http://127.0.0.1:8000/media/portfolio/blogs/banners/Screenshot.png",
+        video_url: null,
+        author: "Divyanshu Soni",
+        tags: "",
+        reading_time_minutes: 3,
+        is_published: true,
+        published_at: null,
+        created_at: "2026-10-27T17:50:38.590647Z",
+        updated_at: "2026-10-27T18:57:37.357710Z",
+      }),
+    });
+
+    window.history.pushState(
+      {},
+      "",
+      "/blogs/simple-shortcuts-that-save-me-hours-of-coding-every-week"
+    );
+    render(<App />);
+
+    expect(
+      await screen.findByRole("heading", {
+        name: /simple shortcuts & setup tweaks/i,
+      })
+    ).toBeInTheDocument();
+    expect(global.fetch).toHaveBeenCalledWith(
+      "http://127.0.0.1:8000/api/portfolio/blogs/simple-shortcuts-that-save-me-hours-of-coding-every-week/"
+    );
+    expect(
+      screen.getByRole("heading", {
+        name: /terminal, keyboard & mouse tweaks/i,
+      })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        name: /1\. shorten long terminal commands with aliases/i,
+      })
+    ).toBeInTheDocument();
+    expect(document.querySelector("video")).not.toBeNull();
+  });
+});

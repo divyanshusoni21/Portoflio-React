@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import {
   HiExternalLink,
   HiOutlineClipboardCopy,
@@ -12,6 +13,7 @@ import {
   HiOutlineDatabase,
   HiOutlineCode,
   HiOutlineBriefcase,
+  HiOutlineBookOpen,
   HiX,
 } from "react-icons/hi";
 import {
@@ -622,12 +624,25 @@ export function DesignCaseStudySlate() {
             <a href="#v1-skills" className="hover:text-indigo-600 transition-colors">
               System Stack
             </a>
+            <Link
+              to="/blogs"
+              className="hover:text-indigo-600 transition-colors inline-flex items-center gap-1"
+            >
+              Blogs
+            </Link>
             <a href="#v1-contact" className="hover:text-indigo-600 transition-colors">
               Contact
             </a>
           </nav>
 
           <div className="flex items-center gap-2">
+            <Link
+              to="/blogs"
+              className="md:hidden px-3 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-bold inline-flex items-center gap-1.5 transition-colors"
+            >
+              <HiOutlineBookOpen size={14} />
+              Blogs
+            </Link>
             <a
               href="https://github.com/divyanshusoni21"
               target="_blank"
